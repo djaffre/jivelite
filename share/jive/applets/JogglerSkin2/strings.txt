@@ -2,7 +2,7 @@
 # The two letter codes are defined by ISO 639-1
 # http://en.wikipedia.org/wiki/List_of_ISO_639_codes
 
-JOGGLER_SKIN
+JOGGLER_SKIN_2
 	EN	Joggler Skin 2
 
 WQVGA_SMALL_SKIN

@@ -459,10 +459,12 @@ end
 
 
 function _setTitleStatus(self, text, duration)
-	log:debug("_setTitleStatus", text)
+	log:debug("_setTitleStatus", " => " .. text)
 
 	local nowPlayingTrackInfoLines = jiveMain:getSkinParam("NOWPLAYING_TRACKINFO_LINES")
 	local msgs = string.split("\n", text)
+	log:debug("_setTitleStatus", " ==> " .. text)
+	log:info("_setTitleStatus", " ===> " .. nowPlayingTrackInfoLines)
 	if nowPlayingTrackInfoLines == 2 and self.artistalbumTitle then
 		if #msgs > 1 then
 			-- artistalbumTitle and trackTitle widgets are used as messaging widget
@@ -470,12 +472,14 @@ function _setTitleStatus(self, text, duration)
 			-- Bug 17937: leave the title alone if a zero-length title is provided
 			self.artistalbumTitle:setValue(msgs[1], duration)
 			if string.len(msgs[2]) > 0 then self.trackTitle:setValue(msgs[2], duration) end
+			log:info("_setTitleStatus", " 1 ")
 		else
 			-- one line message means use trackTitle for line 1 and keep what is already on screen for artistalbumTitle
 			-- keeping existing artistalbumTitle text is important for multiple-showBriefly cases e.g., rebuffering messages
 			-- awy: This may no longer be true.
 			self.trackTitle:setValue(msgs[1], duration)
 			self.artistalbumTitle:setValue(self.artistalbumTitle:getValue(), duration) --keep any temporary text up for same duration to avoid flickering
+			log:info("_setTitleStatus", " 2 ")
 		end
 	elseif nowPlayingTrackInfoLines == 3 and self.titleGroup then --might not exist yet if NP window hasn't yet been created
 		-- use title widget and track title as lines 1 and 2 of messaging
@@ -486,16 +490,29 @@ function _setTitleStatus(self, text, duration)
 			self.trackTitle:setValue(self.trackTitle:getValue(), duration)
 			self.albumTitle:setValue('', duration)
 			self.artistTitle:setValue('', duration)
+			self.artistalbumTitle:setValue(" => ") 
+			log:info("_setTitleStatus", " 3 ")
+			log:info("_setTitleStatus", " 3 ==> " .. self.artistalbumTitle:getValue())
 
 		elseif #msgs == 2 then
 			log:debug('two line message')
 			self.titleGroup:setWidgetValue("text", msgs[1], duration)
 			self.trackTitle:setValue(msgs[2], duration)
 			self.artistTitle:setValue('', duration) 
-			self.albumTitle:setValue('', duration) 
+			self.albumTitle:setValue('', duration)
+			self.artistalbumTitle:setValue(msgs[3] .. " => " .. msgs[4], duration) 
+			log:info("_setTitleStatus", " 4 ")
+			log:info("_setTitleStatus", " 4 ==> " .. self.artistalbumTitle:getValue())
+        else
+			log:debug('more line message')
+			self.artistalbumTitle:setValue(msgs[3] .. " => " .. msgs[4], duration) 
+			log:info("_setTitleStatus", " 5 ")
+			log:info("_setTitleStatus", " 5 ==> " .. self.artistalbumTitle:getValue())
 
 		end
+		log:info("_setTitleStatus", " 6")
 	end
+	log:info("_setTitleStatus", " 7")
 end
 
 function notify_playerTitleStatus(self, player, text, duration)
@@ -933,13 +950,17 @@ function _updateTrack(self, trackinfo, pos, length)
 			trackTable = string.split("\n", trackinfo)
 		end
 
-		local track     = trackTable[1]
-		local artist    = trackTable[2]
-		local album     = trackTable[3]
+		log:info("_updateTrack", " trackTable[1] " .. trackTable[1])
+		log:info("_updateTrack", " trackTable[2] " .. trackTable[2])
+		log:info("_updateTrack", " trackTable[3] " .. trackTable[3])
+		local track     = "\u{266a}     " .. trackTable[1]
+		local artist    = "\u{266c}     " .. trackTable[2]
+		local album     = "\u{266b}     " .. trackTable[3]
 		
 		local artistalbum = ''
 		if artist ~= '' and album ~= '' then
-			artistalbum = artist ..  ' • ' .. album
+			-- artistalbum = artist ..  ' • ' .. album
+			artistalbum = '     ' .. artist .. '     ' .. album
 		elseif artist ~= '' then
 			artistalbum = artist
 		elseif album ~= '' then
@@ -951,17 +972,25 @@ function _updateTrack(self, trackinfo, pos, length)
 		end
 		
 		self.trackTitle:setValue(track)
-		self.albumTitle:setValue(album)
+		-- self.albumTitle:setValue(album)
+		self.albumTitle:setValue(artistalbum)
 		self.artistTitle:setValue(artist)
 		self.artistalbumTitle:setValue(artistalbum)
 		if self.scrollText then
 			self.trackTitle:animate(true)
+			self.artistalbumTitle:animate(true)
+			self.artistTitle:animate(true)
+		    self.albumTitle:animate(true)
 		else
 			self.trackTitle:animate(false)
+			self.artistalbumTitle:animate(false)
+			self.artistTitle:animate(false)
+		    self.albumTitle:animate(false)
 		end
-		self.artistTitle:animate(false)
-		self.albumTitle:animate(false)
-		self.artistalbumTitle:animate(false)
+		log:info("_updateTrack", " track " .. track)
+		log:info("_updateTrack", " album " .. album)
+		log:info("_updateTrack", " artist " .. artist)
+		log:info("_updateTrack", " artistalbum " .. artistalbum)
 
 	end
 end
@@ -1453,9 +1482,9 @@ function _createUI(self)
 		self.scrollSwitchTimer = Timer(3000,
 					function()
 						self.trackTitle:animate(true)
-						self.artistalbumTitle:animate(false)
-						self.artistTitle:animate(false)
-						self.albumTitle:animate(false)
+						self.artistalbumTitle:animate(true)
+						self.artistTitle:animate(true)
+						self.albumTitle:animate(true)
 					end, true)
 		
 	end

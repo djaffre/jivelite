@@ -90,7 +90,7 @@ function param(self)
 		-- NOWPLAYING_TRACKINFO_LINES used in assisting scroll behavior animation on NP
 		-- 3 is for a three line track, artist, and album (e.g., SBtouch)
 		-- 2 is for a two line track, artist+album (e.g., SBradio, SBcontroller)
-		NOWPLAYING_TRACKINFO_LINES = 3,
+		NOWPLAYING_TRACKINFO_LINES = 2,
 		POPUP_THUMB_SIZE = 100,
 		radialClock = {
 			hourTickPath     = 'applets/JogglerSkin2/images/Clocks/Radial/radial_ticks_hr_on.png',
@@ -2833,7 +2833,6 @@ function skin(self, s)
 			border     = _tracklayout.border,
 			x          = _tracklayout.x + 50,
 			y          = 865,
-                        -- y          = 890,
 			h          = 160,
 			npalbum = {
 				w          = screenWidth - _tracklayout.x - 50,
@@ -2849,18 +2848,19 @@ function skin(self, s)
 			hidden = 1,
 			order = { 'npartistalbum' },
 			position   = _tracklayout.position,
-                        border     = _tracklayout.border,
-                        x          = _tracklayout.x + 50,
-                        y          = 830,
-                        h          = 100,
-                        -- npartistalbum =  {
-                        --        w          = screenWidth - _tracklayout.x - 50,
-                        --        align      = _tracklayout.align,
-                        --        lineHeight = _tracklayout.lineHeight,
-                        --        fg         = _tracklayout.fg,
-                        --        font       = _boldfont(NP_TRACK_FONT_SIZE),
-                        --        sh = TEXT_SH_COLOR,
-                        --},
+			border     = _tracklayout.border,
+			x          = _tracklayout.x + 50,
+			y          = 865,
+			h          = 160,
+			npartistalbum = {
+				w          = screenWidth - _tracklayout.x - 50,
+				padding    = { 0, 6, 0, 0 },
+				align      = _tracklayout.align,
+				lineHeight = _tracklayout.lineHeight,
+				fg         = _tracklayout.fg,
+				font       = _font(NP_TRACK_FONT_SIZE),
+				sh = TEXT_SH_COLOR,
+			},
 		},
 	
 		-- cover art
@@ -3000,23 +3000,23 @@ function skin(self, s)
 		-- Progress bar
 		npprogress = {
 			position = LAYOUT_NONE,
-			x = 1000,
+			x = 860,
 			y = TITLE_HEIGHT + 29 + 26 + 32 + 32 + 23 + 80,
 			padding = { 0, 40, 0, 0 },
 			order = { "elapsed", "slider", "remain" },
 			elapsed = {
-				w = 100,
+				w = 140,
 				align = 'left',
 				padding = { 0, 0, 4, 0 },
-				font = _boldfont(40),
+				font = _boldfont(60),
 				fg = { 0xe7,0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			remain = {
-				w = 100,
+				w = 140,
 				align = 'right',
 				padding = { 4, 0, 0, 0 },
-				font = _boldfont(40),
+				font = _boldfont(60),
 				fg = { 0xe7,0xe7, 0xe7 },
 				sh = { 0x37, 0x37, 0x37 },
 			},
@@ -3037,8 +3037,8 @@ function skin(self, s)
 				sh = { 0x37, 0x37, 0x37 },
 			},
 			npprogressB = {
-				w = 500,
-				h = 80,
+				w = 700,
+				h = 280,
 				padding     = { 0, 0, 0, 0 },
 				position = LAYOUT_SOUTH,
 				horizontal = 1,

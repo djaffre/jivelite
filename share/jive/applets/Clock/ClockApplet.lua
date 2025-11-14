@@ -61,6 +61,12 @@ local function _isJogglerSkin(skinName)
 	end
 end
 
+local function _isJogglerSkin2(skinName)
+	if string.match(skinName, 'JogglerSkin2') then
+		return true
+	end
+end
+
 local function _isWQVGASkin(skinName)
     if skinName == 'WQVGAsmallSkin' or skinName == 'WQVGAlargeSkin' then
     	return true
@@ -76,10 +82,13 @@ end
 
 local function _imgpath(self)
 	local skinName = self.skinName
-	
-	if _isJogglerSkin(skinName) then
+
+    if _isJogglerSkin2(skinName) then
+		skinName = 'JogglerSkin2'
+
+    elseif _isJogglerSkin(skinName) then
 		skinName = 'JogglerSkin'
-		
+
 	elseif _isWQVGASkin(skinName) then
 		skinName = "WQVGAsmallSkin"
 	
@@ -200,7 +209,6 @@ end
 function Clock:_getMinute(time)
     return self:_padString(time.min)
 end
-
 
 function Clock:_getDate(time)
     local theDate
@@ -372,7 +380,7 @@ function DotMatrix:Draw()
     self:DrawDate(string.sub(theDate, 6, 6), 'Y2')
     self:DrawDate(string.sub(theDate, 7, 7), 'Y3')
     self:DrawDate(string.sub(theDate, 8, 8), 'Y4')
-    --self:DrawMinTest()
+    -- self:DrawMinTest()
 
     local alarmIcon = self.alarm:getWidget('alarm')
     if self.alarmSet then
@@ -423,7 +431,7 @@ function WordClock:__init(applet)
     obj.textdate = Label('textdate')
     obj.skinParams = WordClock:getSkinParams(skinName)
 
-    if _isJogglerSkin(skinName) or _isWQVGASkin(skinName) or _isHDSkin(skinName) then
+    if _isJogglerSkin(skinName) or _isJogglerSkin2(skinName) or _isWQVGASkin(skinName) or _isHDSkin(skinName) then
         obj.pointer_textIt         = Surface:loadImage(obj.skinParams.textIt)  
         obj.pointer_textIs         = Surface:loadImage(obj.skinParams.textIs)  
         obj.pointer_textHas        = Surface:loadImage(obj.skinParams.textHas)  
@@ -455,7 +463,8 @@ function WordClock:__init(applet)
 
         obj.pointer_textOClock     = Surface:loadImage(obj.skinParams.textOClock)  
         obj.pointer_textAM         = Surface:loadImage(obj.skinParams.textAM)  
-        obj.pointer_textPM         = Surface:loadImage(obj.skinParams.textPM)  
+        obj.pointer_textPM         = Surface:loadImage(obj.skinParams.textPM)
+
     elseif skinName == "QVGAlandscapeSkin" or skinName == "QVGAportraitSkin" or skinName == "QVGA240squareSkin" then
         obj.pointer_hour           = Surface:loadImage(obj.skinParams.hourHand)
         obj.pointer_minute         = Surface:loadImage(obj.skinParams.minuteHand)
@@ -1139,6 +1148,181 @@ function DotMatrix:getDotMatrixClockSkin(skinName)
                 x = x.dot2,
                 w = 13,
                 y = 222,
+            }),
+            Y1 = _uses(_dateDigit, {
+                x = x.Y1,
+            }),
+            Y2 = _uses(_dateDigit, {
+                x = x.Y2,
+            }),
+            Y3 = _uses(_dateDigit, {
+                x = x.Y3,
+            }),
+            Y4 = _uses(_dateDigit, {
+                x = x.Y4,
+            }),
+
+        }
+
+    elseif _isJogglerSkin2(skinName) then
+
+        local dotMatrixBackground = Tile:loadImage(self.imgpath .. "Clocks/Dot_Matrix/wallpaper_clock_dotmatrix.png")
+
+        local _dotMatrixDigit = function(self, digit)
+            local fileName = "Clocks/Dot_Matrix/dotmatrix_clock_" .. tostring(digit) .. ".png"
+            return {
+                w = 61 * 2,
+                h = 134 * 2,
+                img = _loadImage(self, fileName),
+                border = { 6, 0, 6, 0 },
+                align = 'bottom',
+            }
+        end
+    
+        local _dotMatrixDate = function(self, digit)
+            local fileName = "Clocks/Dot_Matrix/dotmatrix_date_" .. tostring(digit) .. ".png"
+            return {
+                w = 27 * 4,
+                h = 43 * 4,
+                img = _loadImage(self, fileName),
+                align = 'bottom',
+                border = { 1, 0, 1, 0 },
+            }
+        end
+    
+        s.icon_dotMatrixDigit0 = _dotMatrixDigit(self, 0)
+        s.icon_dotMatrixDigit1 = _dotMatrixDigit(self, 1)
+        s.icon_dotMatrixDigit2 = _dotMatrixDigit(self, 2)
+        s.icon_dotMatrixDigit3 = _dotMatrixDigit(self, 3)
+        s.icon_dotMatrixDigit4 = _dotMatrixDigit(self, 4)
+        s.icon_dotMatrixDigit5 = _dotMatrixDigit(self, 5)
+        s.icon_dotMatrixDigit6 = _dotMatrixDigit(self, 6)
+        s.icon_dotMatrixDigit7 = _dotMatrixDigit(self, 7)
+        s.icon_dotMatrixDigit8 = _dotMatrixDigit(self, 8)
+        s.icon_dotMatrixDigit9 = _dotMatrixDigit(self, 9)
+        s.icon_dotMatrixDigitNone = _uses(s.icon_dotMatrixDigit9, {
+            img = false,
+        })
+    
+        s.icon_dotMatrixDate0 = _dotMatrixDate(self, 0)
+        s.icon_dotMatrixDate1 = _dotMatrixDate(self, 1)
+        s.icon_dotMatrixDate2 = _dotMatrixDate(self, 2)
+        s.icon_dotMatrixDate3 = _dotMatrixDate(self, 3)
+        s.icon_dotMatrixDate4 = _dotMatrixDate(self, 4)
+        s.icon_dotMatrixDate5 = _dotMatrixDate(self, 5)
+        s.icon_dotMatrixDate6 = _dotMatrixDate(self, 6)
+        s.icon_dotMatrixDate7 = _dotMatrixDate(self, 7)
+        s.icon_dotMatrixDate8 = _dotMatrixDate(self, 8)
+        s.icon_dotMatrixDate9 = _dotMatrixDate(self, 9)
+    
+        s.icon_dotMatrixDateDot = {
+            align = 'bottom',
+            img = _loadImage(self, "Clocks/Dot_Matrix/dotmatrix_dot_sm.png")
+        }
+    
+        s.icon_dotMatrixDots = {
+            align = 'center',
+            border = { 4, 0, 3, 0 },
+            img = _loadImage(self, "Clocks/Dot_Matrix/dotmatrix_clock_dots.png"),
+        }
+    
+        s.icon_alarm_on = {
+            align = 'bottom',
+            img = _loadImage(self, "Clocks/Dot_Matrix/dotmatrix_alarm_on.png"),
+            w   = 36,
+            border = { 0, 0, 13, 0 },
+        }
+    
+        s.icon_alarm_off = _uses(s.icon_alarm_on, {
+            img = false,
+        })
+
+        local jogglerSkinAlignWithBackgroundXOffset = 2
+        local jogglerSkinAlignWithBackgroundYOffset = 1
+        local jogglerSkinXOffset = 10 -- 160 + jogglerSkinAlignWithBackgroundXOffset + 9
+        local jogglerSkinYOffset = 10 -- 104 + jogglerSkinAlignWithBackgroundYOffset
+        
+        local _clockDigit = {
+            position = LAYOUT_NONE,
+            w = (68 * 2) + 4,
+            y = 38 + jogglerSkinYOffset,
+        }
+        local _dateDigit = {
+            position = LAYOUT_NONE,
+            w = 27 * 4,
+            y = (192 + 200 + 43 + 4) + jogglerSkinYOffset,
+        }
+        
+        local x = {}
+        x.h1 = 68 + jogglerSkinXOffset + 50
+        x.h2 = x.h1 + 72 + 68
+        x.dots = x.h2 + 75 + 68 - 1
+        x.m1 = x.dots + 27 + 68 + 1
+        x.m2 = x.m1 + 68 + 72
+        -- x.alarm = 73 + jogglerSkinXOffset
+        x.alarm = jogglerSkinAlarmX
+        -- x.M1 = x.alarm + 36 + 13 + 1 - 3
+        x.M1 = 2
+        x.M2 = x.M1 + 30 + (27 * 3)
+        x.dot1 = x.M2 + 26 + 6 + (27 * 3)
+        x.D1 = x.dot1 + 10 + (27 * 3)
+        x.D2 = x.D1 + 30 + (27 * 3)
+        x.dot2 = x.D2 + 26 + 6 + (27 * 3)
+        x.Y1 = x.dot2 + 10 + (27 * 3)
+        x.Y2 = x.Y1 + 30 + (27 * 3)
+        x.Y3 = x.Y2 + 30 + (27 * 3)
+        x.Y4 = x.Y3 + 29 + 1 + (27 * 3)
+
+        s.Clock = {
+            w = 1100, --800,
+            h = 650, --480,
+            bgImg = dotMatrixBackground,
+            h1 = _uses(_clockDigit, {
+                x = x.h1,
+            }),
+            h2 = _uses(_clockDigit, {
+                x = x.h2,
+            }),
+            dots = {
+                position = LAYOUT_NONE,
+                x = x.dots,
+                w = 38,
+                y = 75 + 75 + jogglerSkinYOffset,
+            },
+            m1 = _uses(_clockDigit, {
+                x = x.m1,
+            }),
+            m2 = _uses(_clockDigit, {
+                x = x.m2,
+            }),
+
+            alarm = _uses(_dateDigit, {
+                w = 45,
+                -- y = 191 + jogglerSkinYOffset,
+                y = jogglerSkinAlarmY,
+                x = x.alarm,
+            }),
+            M1 = _uses(_dateDigit, {
+                x = x.M1,
+            }),
+            M2 = _uses(_dateDigit, {
+                x = x.M2,
+            }),
+            dot1 = _uses(_dateDigit, {
+                x = x.dot1,
+                w = 26,
+                y = 222 + 134 + jogglerSkinYOffset + (43 * 3),
+            }),
+            D1 = _uses(_dateDigit, {
+                x = x.D1,
+            }),
+            D2 = _uses(_dateDigit, {
+                x = x.D2,
+            }),
+            dot2 = _uses(_dateDigit, {
+                x = x.dot2,
+                w = 26,
+                y = 222 + 134 + jogglerSkinYOffset + (43 * 3),
             }),
             Y1 = _uses(_dateDigit, {
                 x = x.Y1,
