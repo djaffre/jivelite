@@ -1254,7 +1254,7 @@ function DotMatrix:getDotMatrixClockSkin(skinName)
         }
         
         local x = {}
-        x.h1 = 68 + jogglerSkinXOffset + 50
+        x.h1 = 68 + jogglerSkinXOffset + 120
         x.h2 = x.h1 + 72 + 68
         x.dots = x.h2 + 75 + 68 - 1
         x.m1 = x.dots + 27 + 68 + 1
